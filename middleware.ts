@@ -1,8 +1,14 @@
-import { authMiddleware } from "@clerk/nextjs";
+import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
 
 export default authMiddleware({
-  secretKey: "SECRET_KEY",
-  publishableKey: "PUB_KEY",
+  signInUrl: "/random",
+  publicRoutes: ["/random"],
+  afterAuth(auth, req) {
+    if (!auth.userId && !auth.isPublicRoute) {
+      return redirectToSignIn();
+    }
+  },
+
 });
 
 export const config = {
